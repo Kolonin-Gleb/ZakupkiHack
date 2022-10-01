@@ -26,8 +26,9 @@ df_offer = pd.read_csv('datasets/data/Ценовые предложения по
 df_offer = df_offer.replace(np.nan, 'none')      # заменяем все значени Nan на строки
 
 df_dict = df_offer.drop(['price', 'inn', 'okpd2_code','country_code'], axis=1).to_dict('records')  # отбросим ненужные для поиска столбцы и запишеи DataFrame в словарь
+# print(df_dict[:10])
 
-# Поиск только по названиям
+# Поиск исключая числовые значения
 def find(df, df_dict, string:str):
     out = {}
     priority = {}   # чем выше приоритет, тем больше совпадений по запросу (для одного товара)
@@ -48,9 +49,42 @@ def find(df, df_dict, string:str):
     return(out)
 
 
-response = find(df_offer, df_dict, 'Лук')
-print(response)
+# response = find(df_offer, df_dict, 'Лук')
+# print(len(response))
 
+# Для лемматизации
+from pymystem3 import Mystem
+
+# Необходимо исключать союзы и вводные слова
+from string import punctuation
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from tqdm.notebook import tqdm
+
+nltk.download('stopwords')
+nltk.download('punkt')
+
+russian_stop = stopwords.words('russian')
+
+def text_processing(text: str):
+    tokens = [token for token in word_tokenize(text.lower()) if (token not in russian_stop and token not in punctuation)]
+    text = " ".join(tokens)
+    return text
+
+
+text = "Стол для рисования"
+text_2 = text_processing(text) # Запрос без союзов и предлогов
+print(text_2)
+
+m = Mystem()
+lemmas = m.lemmatize(text_2)
+lemmatised_search = ''.join(lemmas)
+print(lemmatised_search)
+
+
+response2 = find(df_offer, df_dict, lemmatised_search)
+print(response2)
 
 ######## Поиск
 # Вынесен в файл find.py

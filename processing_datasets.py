@@ -25,7 +25,7 @@ df_offer = pd.read_csv('datasets/data/Ценовые предложения по
 
 ######## Преобразование датасетов к виду для поиска
 
-nltk.download("stopwords")
+nltk.download('stopwords')
 nltk.download('punkt')
 
 df_offer = df_offer.replace(np.nan, 'none')
@@ -55,6 +55,8 @@ print(df_offer.head())
 print("\n\n\n")
 # df_offer.to_csv('processed Ценовые предложения поставщиков.csv')
 
+
+# Обработка всех датасетов с сохранением
 
 
 
