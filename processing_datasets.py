@@ -16,24 +16,26 @@ from tqdm.notebook import tqdm
 Добавить в папку datasets папку data c полными версиями датасетов (3 .csv файла)
 '''
 
-######## Открытие полных версий датасетов
+######## Обработка полных версий датасетов
 
 
-# df_contract = pd.read_csv('datasets/data/Контракты 44ФЗ.csv', sep=';')
+df_contract = pd.read_csv('datasets/data/Контракты 44ФЗ.csv', sep=';')
 # df_guide = pd.read_csv('datasets/data/Справочник пром производства.csv', sep=';')
-df_offer = pd.read_csv('datasets/data/Ценовые предложения поставщиков.csv', sep=';')
+# df_offer = pd.read_csv('datasets/data/Ценовые предложения поставщиков.csv', sep=';')
 
 ######## Преобразование датасетов к виду для поиска
 
 nltk.download('stopwords')
 nltk.download('punkt')
 
-df_offer = df_offer.replace(np.nan, 'none')
+# df_offer = df_offer.replace(np.nan, 'none')
+# df_guide = df_guide.replace(np.nan, 'none')
+df_contract = df_contract.replace(np.nan, 'none')
 
 russian_stop = stopwords.words('russian')
 
 processing_columns = ['product_name', 'product_msr', 'product_characteristics', 'okpd2_name']
-# TODO: Функция Маши может плохо работать, если product_characteristics обрабатывается,
+#TODO: Функция Маши может плохо работать, если product_characteristics обрабатывается,
 # т.к. она использует имеющиеся разделители
 def data_processing(df: pd.DataFrame, processing_columns: list):
     for name in tqdm(processing_columns):
@@ -47,14 +49,15 @@ def text_processing(text:str):
 # Тест функции
 
 print("------------- Датасет до обработки -------------")
-print(df_offer.head())
+print(df_contract.head())
 print("\n\n\n")
 print("------------- Датасет после обработки -------------")
-data_processing(df_offer, processing_columns)
-print(df_offer.head())
+data_processing(df_contract, processing_columns)
+print(df_contract.head())
 print("\n\n\n")
 # df_offer.to_csv('processed Ценовые предложения поставщиков.csv')
-
+# df_guide.to_csv('processed пром производства.csv')
+df_contract.to_csv('processed 44ФЗ.csv', sep=';')
 
 # Обработка всех датасетов с сохранением
 

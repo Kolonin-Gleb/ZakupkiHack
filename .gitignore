@@ -540,3 +540,6 @@ FodyWeavers.xsd
 /datasets/data/Контракты 44ФЗ.csv
 /datasets/data/Справочник пром производства.csv
 /datasets/data/Ценовые предложения поставщиков.csv
+/datasets/processed_data/processed пром производства.csv
+/datasets/processed_data/processed Ценовые предложения поставщиков.csv
+/datasets/processed_data/processed 44ФЗ.csv

@@ -12,23 +12,59 @@
 Характеристики в формате {характеристика1:значение1, характеристика2 :значение2}
 """
 
+# Для поиска
 import pandas as pd
 import numpy as np
 import re
 
-######## Открытие полных версий датасетов
+# Для лемматизации поискового запроса
+from pymystem3 import Mystem
 
+# Для исключения союзов и вводных слов
+from string import punctuation
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from tqdm.notebook import tqdm
 
-# df_contract = pd.read_csv('datasets/data/Контракты 44ФЗ.csv', sep=';')
-# df_guide = pd.read_csv('datasets/data/Справочник пром производства.csv', sep=';')
+nltk.download('stopwords')
+nltk.download('punkt')
+
+russian_stop = stopwords.words('russian')
+
+def text_processing(text: str):
+    tokens = [token for token in word_tokenize(text.lower()) if (token not in russian_stop and token not in punctuation)]
+    text = " ".join(tokens)
+    return text
+
+# Подготовка запроса для осуществления поиска
+original_search_query = "Стол для рисования"
+cleaned_search_query = text_processing(original_search_query) # Запрос без союзов и предлогов
+print(cleaned_search_query)
+
+m = Mystem()
+lemmas = m.lemmatize(cleaned_search_query) # Запрос в стандартном виде
+lemmatised_search = ''.join(lemmas)
+print(lemmatised_search)
+
+'''
+Если передают категорию, то искать внутри категории + по параметрам
+'''
+
+######## Открытие датасета Ценновых предложений для осуществления поиска
 df_offer = pd.read_csv('datasets/data/Ценовые предложения поставщиков.csv', sep=';')
-
-df_offer = df_offer.replace(np.nan, 'none')      # заменяем все значени Nan на строки
-
+df_offer = df_offer.replace(np.nan, 'none') # заменяем все значени Nan на строки
 df_dict = df_offer.drop(['price', 'inn', 'okpd2_code','country_code'], axis=1).to_dict('records')  # отбросим ненужные для поиска столбцы и запишеи DataFrame в словарь
-# print(df_dict[:10])
 
-# Поиск исключая числовые значения
+def search(query: str, country_name = "", category = "", params = []):
+    response2 = find(df_offer, df_dict, lemmatised_search)
+    print(response2)
+    print(type(response2))
+    return response2
+
+
+# Поиск только среди ценновых предложений
+# Идёт по не числовым столбцам.
 def find(df, df_dict, string:str):
     out = {}
     priority = {}   # чем выше приоритет, тем больше совпадений по запросу (для одного товара)
@@ -48,43 +84,8 @@ def find(df, df_dict, string:str):
         if p < max(priority.values()): out.pop(k)   # Оставляем товары с лучшим совпадением
     return(out)
 
-
-# response = find(df_offer, df_dict, 'Лук')
-# print(len(response))
-
-# Для лемматизации
-from pymystem3 import Mystem
-
-# Необходимо исключать союзы и вводные слова
-from string import punctuation
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
-from tqdm.notebook import tqdm
-
-nltk.download('stopwords')
-nltk.download('punkt')
-
-russian_stop = stopwords.words('russian')
-
-def text_processing(text: str):
-    tokens = [token for token in word_tokenize(text.lower()) if (token not in russian_stop and token not in punctuation)]
-    text = " ".join(tokens)
-    return text
-
-
-text = "Стол для рисования"
-text_2 = text_processing(text) # Запрос без союзов и предлогов
-print(text_2)
-
-m = Mystem()
-lemmas = m.lemmatize(text_2)
-lemmatised_search = ''.join(lemmas)
-print(lemmatised_search)
-
-
-response2 = find(df_offer, df_dict, lemmatised_search)
-print(response2)
+# Непосредственный запуск поиска
+search(lemmatised_search, country_name = "", category = "", params = [])
 
 ######## Поиск
 # Вынесен в файл find.py
@@ -95,6 +96,8 @@ print(response2)
 #TODO: Принимает на вход DF от функции find
 '''
 Сортировка результата поиска по приоритету для пользователя
+По цене
+По числу завершенных сделок
 '''
 
 ######## Отображение отсортированного результата у Коли
@@ -105,4 +108,6 @@ print(response2)
 ######## Подсчёт полезных статистик для пользователя
 '''
 Код
+
 '''
+
