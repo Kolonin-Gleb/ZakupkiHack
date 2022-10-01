@@ -3,7 +3,12 @@
 import pandas as pd
 import numpy as np
 import re
-
+# Для преобразования датасетов к виду для поиска
+from string import punctuation
+import nltk
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+from tqdm.notebook import tqdm
 
 '''
 # Important Note:
@@ -19,57 +24,40 @@ import re
 df_offer = pd.read_csv('datasets/data/Ценовые предложения поставщиков.csv', sep=';')
 
 ######## Преобразование датасетов к виду для поиска
-'''
-Тут будет код от Васи
-'''
 
-######## Поиск
-'''
-Должен вызываться с Фронтенда
-'''
+nltk.download("stopwords")
+nltk.download('punkt')
 
-df_offer = df_offer.replace(np.nan, 'none')      # заменяем все значени Nan на строки
+df_offer = df_offer.replace(np.nan, 'none')
 
-df_dict = df_offer.drop(['price', 'inn', 'okpd2_code','country_code'], axis=1).to_dict('records')  # отбросим ненужные для поиска столбцы и запишеи DataFrame в словарь
+russian_stop = stopwords.words('russian')
 
-def find(df, df_dict, string:str):
-    out = {}
-    priority = {}   # чем выше приоритет, тем больше совпадений по запросу (для одного товара)
-    words = [word for word in string.split(' ') if word.strip()]   # разделяем запрос на слова убрав лишние пробелы
-    for word in words:   # проходимся по каждому слову из запроса
-        first = True
-        for i in range(len(df_dict)):   # проходимся по каждой строке из DataFrame
-            r = re.compile(f"\w* {word} \w*")  # ищем по патерну 'что-то пробел нужное слово что-то'
-            match = list(filter(r.findall, list(df_dict[i].values())))
-            if match:   # eсли нашлось совпадение :
-                if i not in out:   # Если продукт еще не был добавлен
-                    out[i] = df.iloc[i]   # создаем поле с этим продуктом
-                    priority[i] = 0   # даем ему низший приоритет
-                elif first:
-                    priority[i] += 1   # Если продукт уже добавлен - повышаем приоритет
-    for k, p in priority.items():
-        if p < max(priority.values()): out.pop(k)   # Оставляем товары с лучшим совпадением
-    return(out)
+processing_columns = ['product_name', 'product_msr', 'product_characteristics', 'okpd2_name']
+# TODO: Функция Маши может плохо работать, если product_characteristics обрабатывается,
+# т.к. она использует имеющиеся разделители
+def data_processing(df: pd.DataFrame, processing_columns: list):
+    for name in tqdm(processing_columns):
+        df[name] = df[name].map(lambda x: text_processing(x))
 
+def text_processing(text:str):
+    tokens = [token for token in word_tokenize(text.lower()) if (token not in russian_stop and token not in punctuation)]
+    text = " ".join(tokens)
+    return text
 
-response = find(df_offer, df_dict, 'Лук')
-print(response)
+# Тест функции
+
+print("------------- Датасет до обработки -------------")
+print(df_offer.head())
+print("\n\n\n")
+print("------------- Датасет после обработки -------------")
+data_processing(df_offer, processing_columns)
+print(df_offer.head())
+print("\n\n\n")
+# df_offer.to_csv('processed Ценовые предложения поставщиков.csv')
 
 
-######## Сортировка результата поиска
-#TODO: Принимает на вход DF от функции find
-'''
-Сортировка результата поиска по приоритету для пользователя
-'''
 
-######## Отображение отсортированного результата у Коли
-'''
-Код
-'''
-
-######## Подсчёт полезных статистик для пользователя
-'''
-Код
-'''
+# Как убедиться в роботоспособности функции преобразования датасетов от Васи?
+# Нужно глянуть DF до использования функции и после.
 
 
