@@ -41,7 +41,8 @@ def data_processing(df: pd.DataFrame, processing_columns: list):
     for name in tqdm(processing_columns):
         df[name] = df[name].map(lambda x: text_processing(x))
 
-def text_processing(text:str):
+def text_processing(text:str, punctuation=punctuation, include_punctuation=True):
+    if not include_punctuation: punctuation = ''
     tokens = [token for token in word_tokenize(text.lower()) if (token not in russian_stop and token not in punctuation and token != 'none')]
     text = " ".join(tokens)
     return text
