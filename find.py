@@ -67,6 +67,7 @@ def search(query: str, country_name = "", category = "", params = []):
     return response2
 
 
+
 # Поиск только среди ценновых предложений
 # Идёт по не числовым столбцам.
 def find(df, df_dict, string:str):
