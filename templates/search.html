@@ -39,9 +39,9 @@
                         <tbody>
                             {% for product in product_list %}
                             <tr>
-                                <td><a href="{{ url_for('product_page',id = product['name']) }}">{{product["name"]}}</a></td>
+                                <td><a href="{{ url_for('product_page',id = product['name']) }}">{{product["product_name"]}}</a></td>
                                 <td>{{product["price"]}}</td>
-                                <td>{{product["saler_inn"]}}</td>
+                                <td>{{product["inn"]}}</td>
                                 <td>{{product["okpd2_name"]}}</td>
                             </tr>
                             {% endfor %}

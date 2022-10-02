@@ -16,6 +16,7 @@ def index(name='Anonymous'):
 @app.route("/search/", methods=('GET', 'POST'))
 def search():
     characteristics = []
+    product_list = []
     # print(product_list)
     if(request.method == 'POST'):
         query = request.form["query"]
@@ -28,7 +29,14 @@ def search():
         
         # search projects
         result = find.search(query, country_name = "", category = "", params = [])
-        print(result)
+        print(result.keys())
+        for product_id in result:
+            # print(result[product]["product_name"])
+            # print(result[product]["price"] )
+            # print(result[product]["inn"])
+            # print(result[product]["okpd2_name"])
+            product_list.append(result[product_id])
+        # print(result)
 
         # return f"query = {query}<br>params = {params}"
         return render_template('search.html', product_list=product_list, characteristics=characteristics)
