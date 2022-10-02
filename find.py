@@ -60,7 +60,7 @@ df_offer = df_offer.replace(np.nan, 'none') # заменяем все значе
 df_dict = df_offer.drop(['price', 'inn', 'okpd2_code','country_code'], axis=1).to_dict('records')  # отбросим ненужные для поиска столбцы и запишеи DataFrame в словарь
 
 def search(query: str, country_name = "", category = "", params = []):
-    lemmatised_search = preparing_search_query("Стол для рисования")
+    lemmatised_search = preparing_search_query(query)
     response2 = find(df_offer, df_dict, lemmatised_search) # Поиск идёт только в df_offer
     print(response2)
     print(type(response2))
@@ -89,8 +89,8 @@ def find(df, df_dict, string:str):
     return(out)
 
 # Непосредственный запуск поиска
-raw_search = "Стол для рисования"
-search(raw_search, country_name = "", category = "", params = [])
+# raw_search = "Стол для рисования"
+# search(raw_search, country_name = "", category = "", params = [])
 
 
 ######## Сортировка результата поиска

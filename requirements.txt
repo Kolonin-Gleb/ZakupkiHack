@@ -16,3 +16,4 @@ six==1.16.0
 tqdm==4.64.1
 Werkzeug==2.2.2
 zipp==3.8.1
+pymystem3==0.2.0
