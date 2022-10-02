@@ -23,6 +23,22 @@ df_contract = pd.read_csv('datasets/data/Контракты 44ФЗ.csv', sep=';'
 # df_guide = pd.read_csv('datasets/data/Справочник пром производства.csv', sep=';')
 # df_offer = pd.read_csv('datasets/data/Ценовые предложения поставщиков.csv', sep=';')
 
+# Словарь iso-code: Country_name
+df_country_old = pd.read_csv('datasets/country_directory.csv', sep=';')
+country_dict = {}
+for i in range(len(df_country_old)):
+    country_dict[df_country_old.country_iso_code[i]] = df_country_old.country_name[i]
+
+# Функция работает только для датасета Контракты 44ФЗ.csv
+def replace_cod(x, country_dict):
+    new_list = list(map(float, str(x).replace('|', ',').split(',')))
+    return ' '.join([str(country_dict.get(item,item)) for item in new_list])
+
+# Замена iso-номеров на страны
+df_contract.country_code = df_contract.country_code.apply(lambda x: replace_cod(x, country_dict))
+# df_guide.country_code = df_guide.country_code.map(country_dict)
+# df_offer.country_code = df_offer.country_code.map(country_dict)
+
 ######## Преобразование датасетов к виду для поиска
 
 nltk.download('stopwords')
@@ -56,9 +72,9 @@ print("------------- Датасет после обработки -------------"
 data_processing(df_contract, processing_columns)
 print(df_contract.head())
 print("\n\n\n")
-# df_offer.to_csv('processed Ценовые предложения поставщиков.csv')
-# df_guide.to_csv('processed пром производства.csv')
-df_contract.to_csv('processed 44ФЗ.csv', sep=';')
+# df_offer.to_csv('processed Ценовые предложения поставщиков.csv', index=False, sep=';')
+# df_guide.to_csv('processed пром производства.csv', index=False, sep=';')
+df_contract.to_csv('processed 44ФЗ.csv', index=False, sep=';')
 
 # Обработка всех датасетов с сохранением
 

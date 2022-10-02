@@ -57,7 +57,7 @@ df_offer = df_offer.replace(np.nan, 'none') # заменяем все значе
 df_dict = df_offer.drop(['price', 'inn', 'okpd2_code','country_code'], axis=1).to_dict('records')  # отбросим ненужные для поиска столбцы и запишеи DataFrame в словарь
 
 def search(query: str, country_name = "", category = "", params = []):
-    response2 = find(df_offer, df_dict, lemmatised_search)
+    response2 = find(df_offer, df_dict, lemmatised_search) # Поиск идёт только в df_offer
     print(response2)
     print(type(response2))
     return response2
@@ -87,10 +87,6 @@ def find(df, df_dict, string:str):
 # Непосредственный запуск поиска
 search(lemmatised_search, country_name = "", category = "", params = [])
 
-######## Поиск
-# Вынесен в файл find.py
-
-
 
 ######## Сортировка результата поиска
 #TODO: Принимает на вход DF от функции find
@@ -102,7 +98,7 @@ search(lemmatised_search, country_name = "", category = "", params = [])
 
 ######## Отображение отсортированного результата у Коли
 '''
-Код
+Функция search уже выдаёт результат по приоритету. Только не отсортированный по цене и т.д.
 '''
 
 ######## Подсчёт полезных статистик для пользователя
