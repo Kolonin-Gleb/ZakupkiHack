@@ -543,3 +543,4 @@ FodyWeavers.xsd
 /datasets/processed_data/processed пром производства.csv
 /datasets/processed_data/processed Ценовые предложения поставщиков.csv
 /datasets/processed_data/processed 44ФЗ.csv
+/finalized_model.sav
