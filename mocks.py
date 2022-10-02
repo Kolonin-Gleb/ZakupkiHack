@@ -9,6 +9,8 @@ category_a = {
 product_a = {
     "id":   1,
     "name":   "product_a name",
+    "price":13433,
+    "tax":"10%",
     "okpd2_name":   "category_a",
     "saler_inn":   12345678,
     "characteristics":   {"description": "product_a description",
@@ -20,6 +22,8 @@ product_a = {
 product_b = {
     "id": 31,
     "name": "product_a name",
+    "price":877,
+    "tax":"20%",
     "okpd2_name": "category_a",
     "saler_inn": 12345678,
     "characteristics": {"description": "product_a description",
@@ -31,6 +35,8 @@ product_b = {
 product_c = {
     "id": 23,
     "name": "product_a name",
+    "price":98,
+    "tax":"no",
     "okpd2_name": "category_a",
     "saler_inn": 87654321,
     "characteristics": {"description": "product_a description",
@@ -52,5 +58,24 @@ saler_a = {
     "product_list": product_list_saler_a,
     "sales": 120,
     "products_count": len(product_list)
+}
+
+
+categories = {
+    "okpd_category_a": {
+        "characteristics": {
+            "width": 30,  # count_of_uses
+            "heigth": 14,  # count_of_uses
+            "color": 3,  # count_of_uses
+        }
+    },
+    "okpd_category_b": {
+        "characteristics": {
+            "weigth": 30,  # count_of_uses
+            "size": 14,  # count_of_uses
+            "color": 3,  # count_of_uses
+            "description": 3,  # count_of_uses
+        }
+    }
 }
 # mock-end

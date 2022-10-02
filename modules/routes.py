@@ -12,20 +12,24 @@ def index(name='Anonymous'):
     return f"Hello {name}!!"
 
 
-@app.route("/search")
+@app.route("/search", methods=['GET', 'POST'])
 def search():
     # print(product_list)
-    query = request.args.get('query', default="", type=str)
-    country_name = request.args.get('country', default="", type=str)
-    category = request.args.get('category', default="", type=str)
-    params = list(
-        map(lambda x: x.split("="),
-            request.args.get('params', default="", type=str).split(",")))
+    if(request.method == 'POST'):
+        query = request.form["query"]
+        print(query)
+        country_name = request.form["country"]
+        category = request.form["category"]
+        characteristics = list(
+            map(lambda x: x.split("="),
+                request.form["characteristics"].split(",")))
 
-    # search projects
+        # search projects
 
-    # return f"query = {query}<br>params = {params}"
-    return render_template('search.html', product_list=product_list)
+        # return f"query = {query}<br>params = {params}"
+    elif(request.method == "GET"):
+        characteristics = None
+    return render_template('search.html', product_list=product_list, characteristics=characteristics)
 
 
 @app.route("/product/<id>")
