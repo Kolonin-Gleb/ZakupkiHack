@@ -112,3 +112,5 @@ def find(df, df_dict, string:str):
 
 '''
 
+def find_by_id(id):
+    return df_offer.iloc[id]

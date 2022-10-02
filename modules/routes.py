@@ -45,12 +45,16 @@ def search():
     return render_template('search.html', product_list=product_list, characteristics=characteristics)
 
 
-@app.route("/product/<id>")
+@app.route("/product/<int:id>")
 def product_page(id):
 
     # find project by id
-
-    return render_template('product.html', product=product_a)
+    print(find.find_by_id(id))
+    product = find.find_by_id(id)
+    product["product_characteristics"] = product["product_characteristics"].split("||")
+    print(product["product_characteristics"])
+    
+    return render_template('product.html', product=product)
 
 
 @app.route("/saler/<inn>")

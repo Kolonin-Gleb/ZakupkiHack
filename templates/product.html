@@ -1,17 +1,17 @@
 <html>
     <head>
-        <title>{{product["name"]}}</title>
+        <title>{{product["product_name"]}}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
     </head>
     <body>
         <div class="col-lg-8 mx-auto p-4 py-md-5">
-            <h1>{{product["name"]}}</h1>
+            <h1>{{product["product_name"]}}</h1>
             <p class="fs-5 col-md-8">
                 <table class="table table-striped table-sm">
-                    {% for characteristic in product["characteristics"] %}
+                    {% for characteristic in product["product_characteristics"] %}
                     <tr>
                         <td>{{characteristic}}</td>
-                        <td>{{product["characteristics"][characteristic]}}</td>
+                        <td>{{product["product_characteristics"][characteristic]}}</td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="col-md-6">
                     <h2>saler:</h2>
-                    {{product["saler_inn"]}}
+                    {{product["inn"]}}
                 </div>
             </div>
         </div>
